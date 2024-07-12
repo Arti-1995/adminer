@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: symfony_app
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://symfony:symfony@db:5432/symfony?serverVersion=13&charset=utf8"
+      
+  db:
+    image: postgres:13
+    container_name: symfony_db
+    environment:
+      POSTGRES_DB: symfony
+      POSTGRES_USER: symfony
+      POSTGRES_PASSWORD: symfony
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
